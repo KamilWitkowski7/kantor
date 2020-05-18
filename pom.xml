@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>pl.kw</groupId>
+  <artifactId>app-parent</artifactId>
+  <version>0.0.0</version> <!-- maintained by jgitver plugin -->
+  <packaging>pom</packaging>
+
+  <name>app</name>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.2.2.RELEASE</version>
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>11</java.version>
+    <springfox.version>2.9.2</springfox.version>
+    <commons-validator.version>1.6</commons-validator.version>
+    <commons-beanutils.version>1.9.4</commons-beanutils.version>
+    <vavr.version>0.9.2</vavr.version>
+    <jgitver.version>1.5.1</jgitver.version>
+    <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+    <checkstyle.version>8.25</checkstyle.version>
+    <junit-bom.version>5.6.0-M1</junit-bom.version>
+    <commons-validator.version>1.6</commons-validator.version>
+    <vavr.version>0.9.2</vavr.version>
+    <greenmail.version>1.5.11</greenmail.version>
+    <testcontainers.version>1.12.4</testcontainers.version>
+    <pdf-util.version>0.0.3</pdf-util.version>
+    <archunit.version>0.13.0</archunit.version>
+    <jsoup.version>1.12.1</jsoup.version>
+    <sfm-csv.version>8.2.1</sfm-csv.version>
+    <skipITs>false</skipITs>
+  </properties>
+
+  <modules>
+    <module>app</module>
+    <module>checkstyle</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>SystemTests</id>
+      <properties>
+        <skipITs>false</skipITs>
+      </properties>
+    </profile>
+  </profiles>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Start of Swagger -->
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+        <version>${springfox.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+        <version>${springfox.version}</version>
+      </dependency>
+      <!-- End of Swagger -->
+
+      <!-- start of monitoring -->
+      <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-registry-prometheus</artifactId>
+        <version>1.2.1</version>
+      </dependency>
+      <!-- end of monitoring -->
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+        <version>2.2.2.RELEASE</version>
+      </dependency>
+
+      <!-- Commons Validator -->
+      <dependency>
+        <groupId>commons-validator</groupId>
+        <artifactId>commons-validator</artifactId>
+        <version>${commons-validator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${commons-beanutils.version}</version>
+      </dependency>
+      <!-- Test dependencies -->
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit-bom.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <!-- Testcontainers -->
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${testcontainers.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <!-- ArchUnit -->
+      <dependency>
+        <groupId>com.tngtech.archunit</groupId>
+        <artifactId>archunit</artifactId>
+        <version>${archunit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.tngtech.archunit</groupId>
+        <artifactId>archunit-junit5</artifactId>
+        <version>${archunit.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>pl.kw.app.AppConfig</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+     <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.22.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <skipITs>${skipITs}</skipITs>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <echo>used version: ${jgitver.used_version}</echo>
+                <echo>version calculated: ${jgitver.calculated_version}</echo>
+                <echo>dirty: ${jgitver.dirty}</echo>
+                <echo>head_committer_name: ${jgitver.head_committer_name}</echo>
+                <echo>head_commiter_email: ${jgitver.head_commiter_email}</echo>
+                <echo>head_commit_datetime: ${jgitver.head_commit_datetime}</echo>
+                <echo>git_sha1_full: ${jgitver.git_sha1_full}</echo>
+                <echo>git_sha1_8: ${jgitver.git_sha1_8}</echo>
+                <echo>branch_name: ${jgitver.branch_name}</echo>
+                <echo>head_tags: ${jgitver.head_tags}</echo>
+                <echo>head_annotated_tags: ${jgitver.head_annotated_tags}</echo>
+                <echo>head_lightweight_tags: ${jgitver.head_lightweight_tags}</echo>
+                <echo>base_tag: ${jgitver.base_tag}</echo>
+                <echo>all_tags: ${jgitver.all_tags}</echo>
+                <echo>all_annotated_tags: ${jgitver.all_annotated_tags}</echo>
+                <echo>all_lightweight_tags: ${jgitver.all_lightweight_tags}</echo>
+                <echo>all_version_tags: ${jgitver.all_version_tags}</echo>
+                <echo>all_version_annotated_tags:
+                  ${jgitver.all_version_annotated_tags}
+                </echo>
+                <echo>all_version_lightweight_tags:
+                  ${jgitver.all_version_lightweight_tags}
+                </echo>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <!-- Checkstyle -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${maven-checkstyle-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>pl.kw</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${project.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <id>validate</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <configLocation>google_checks.xml</configLocation>
+            <encoding>UTF-8</encoding>
+            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+            <includeTestResources>true</includeTestResources>
+            <consoleOutput>true</consoleOutput>
+            <violationSeverity>warning</violationSeverity>
+            <failOnViolation>true</failOnViolation>
+            <failsOnError>true</failsOnError>
+            <resourceExcludes>${project.build.directory}/**</resourceExcludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <argLine>-Dfile.encoding=UTF-8</argLine>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>

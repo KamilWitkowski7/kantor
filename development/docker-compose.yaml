@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    network_mode: bridge
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    links:
+      - "mongo"
+    container_name: mongo-express
+    image: mongo-express
+    network_mode: bridge
+    restart: always
+    ports:
+      - 8082:8081
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      # Przy teście kontenera można zmienić port na podstawie mongoDb.getMappedPort(27017)
+      
+      

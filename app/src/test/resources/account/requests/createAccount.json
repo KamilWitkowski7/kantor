@@ -1,0 +1,8 @@
+{
+  "accountToCreate": {
+    "balanceInPln": 1000.5,
+    "firstName": "Kamil",
+    "lastName": "Witkowski",
+    "pesel": "53052657997"
+  }
+}
