@@ -7,14 +7,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
 @Builder
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AccountToCreate {
     @NotEmpty(message = "{firstName.notEmpty}")
     @ApiModelProperty(example = "Kamil")

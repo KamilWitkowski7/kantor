@@ -2,19 +2,19 @@ package pl.kw.app.account.core.application;
 
 import org.springframework.stereotype.Component;
 
-import pl.kw.app.account.boundary.GetAccountCommand;
+import pl.kw.app.account.boundary.GetAccountQuery;
 import pl.kw.app.account.boundary.secondary.AccountRepository;
 
 import java.util.Optional;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Component
-@AllArgsConstructor
-public class GetAccountCommandHandler {
+@RequiredArgsConstructor
+public class GetAccountQueryHandler {
     private final AccountRepository accountRepository;
 
-    public Optional<Account> handle(GetAccountCommand command) {
+    public Optional<Account> handle(GetAccountQuery command) {
         return accountRepository.getAccountById(command.getPesel());
     }
 }

@@ -7,15 +7,15 @@ import pl.kw.app.account.boundary.primary.dto.AccountToCreate;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
 @Builder
-@AllArgsConstructor(onConstructor = @__(@JsonCreator))
+@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))
 public class CreateAccountCommand {
     @Valid
     @NotNull
-    private AccountToCreate accountToCreate;
+    private final AccountToCreate accountToCreate;
 }

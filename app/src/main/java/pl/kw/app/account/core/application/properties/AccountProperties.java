@@ -13,4 +13,6 @@ public class AccountProperties {
     private String minimalAgeNotMet;
     private String accountAlreadyExists;
     private String nbpUri;
+    private int nbpConnectionTimeoutInMilliSeconds;
+    private int nbpReadTimeoutInMilliSeconds;
 }

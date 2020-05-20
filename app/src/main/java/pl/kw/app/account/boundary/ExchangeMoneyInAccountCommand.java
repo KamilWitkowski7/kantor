@@ -10,17 +10,17 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
 @Builder
-@AllArgsConstructor(onConstructor = @__(@JsonCreator))
+@RequiredArgsConstructor(onConstructor = @__(@JsonCreator))
 public class ExchangeMoneyInAccountCommand {
     @Valid
     @NotNull
-    private TransactionDetails transactionDetails;
+    private final TransactionDetails transactionDetails;
 
     @NotEmpty(message = "{pesel.notEmpty}")
     @PeselValue

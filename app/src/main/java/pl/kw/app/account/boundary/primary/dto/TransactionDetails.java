@@ -6,13 +6,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
 @Builder
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TransactionDetails {
     @ApiModelProperty(example = "PLN")
     @NotNull(message = "{initialCurrency.notEmpty}")

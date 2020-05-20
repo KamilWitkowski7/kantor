@@ -14,17 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pl.kw.app.account.boundary.CreateAccountCommand;
 import pl.kw.app.account.boundary.ExchangeMoneyInAccountCommand;
-import pl.kw.app.account.boundary.GetAccountCommand;
+import pl.kw.app.account.boundary.GetAccountQuery;
 import pl.kw.app.account.boundary.primary.dto.PeselValue;
-import pl.kw.app.account.boundary.secondary.dto.Currency;
 import pl.kw.app.account.core.application.Account;
 import pl.kw.app.account.core.application.ExchangeMoneyInAccountCommandHandler;
-import pl.kw.app.account.core.application.GetAccountCommandHandler;
+import pl.kw.app.account.core.application.GetAccountQueryHandler;
 import pl.kw.app.account.core.domain.AgeException;
 import pl.kw.app.account.core.application.ConditionalOnPropertyNotEmpty;
 import pl.kw.app.account.core.application.CreateAccountCommandHandler;
 import pl.kw.app.account.core.domain.AlreadyExistException;
-import pl.kw.app.account.infrastructure.secondary.currency.NbpJsonIntegration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -33,20 +31,20 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
 @RequestMapping("/accounts/")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @ConditionalOnPropertyNotEmpty("mongodb.replace.in-memory")
 @Validated
 class AccountController {
-    private CreateAccountCommandHandler createAccountCommandHandler;
-    private GetAccountCommandHandler getAccountCommandHandler;
-    private ExchangeMoneyInAccountCommandHandler exchangeMoneyInAccountCommandHandler;
+    private final CreateAccountCommandHandler createAccountCommandHandler;
+    private final GetAccountQueryHandler getAccountQueryHandler;
+    private final ExchangeMoneyInAccountCommandHandler exchangeMoneyInAccountCommandHandler;
 
     @ApiOperation(value = "Create new account")
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -91,7 +89,7 @@ class AccountController {
     )  {
         log.info("App got request [{}]", id);
         try {
-            return new ResponseEntity<>(getAccountCommandHandler.handle(GetAccountCommand.of(id)), HttpStatus.OK);
+            return new ResponseEntity<>(getAccountQueryHandler.handle(GetAccountQuery.of(id)), HttpStatus.OK);
         } catch (Exception exception) {
             log.error("Exception occured: ", exception);
             return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-public class GetAccountCommand {
+public class GetAccountQuery {
     @Valid
     @NotEmpty(message = "{pesel.notEmpty}")
     @PeselValue
